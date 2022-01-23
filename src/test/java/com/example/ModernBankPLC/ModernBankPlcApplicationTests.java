@@ -4,10 +4,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ModernBankPlcApplicationTests {
+public class ModernBankPlcApplicationTests {
 
 	@Test
 	void contextLoads() {
 	}
 
+	@Test
+	public void main() {
+		ModernBankPlcApplication.main(new String[] {});
+	}
 }

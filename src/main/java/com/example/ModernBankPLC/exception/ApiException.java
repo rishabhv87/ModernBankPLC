@@ -1,5 +1,10 @@
 package com.example.ModernBankPLC.exception;
-
+/**
+ * @author Rishabh Vishwakarma
+ * @version 1.0.0
+ *
+ * Exception class DTO that is sent to client
+ */
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.HttpStatus;

@@ -4,14 +4,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.math.BigDecimal;
 
+
+/**
+ * Balance DTO to return customer with account-id , balance and currency
+ */
 @Data
 @AllArgsConstructor
 public class BalanceDTO {
 
     @JsonProperty("account-id")
     private int accountId ;
-    private double balance;
+    private BigDecimal balance;
     private String currency;
 
 }

@@ -6,33 +6,42 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
+
+/**
+ * DTO class will be used to communicate between one service to another service or client
+ */
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class AccountDTO {
 
     @JsonProperty("account-id")
     private int accountId ;
-    private double balance;
+    private BigDecimal balance;
     private String currency;
+
+
     @JsonProperty("isAccountActive")
     private boolean active;
 
     public AccountDTO(Account account) {
         this.accountId = account.getAccountId();
-        this.balance = account.getBalance();
+        this.balance = account.getBalance().setScale(2);
         this.currency = account.getCurrency();
         this.active = account.isActive();
     }
 
-
-    /*public AccountDTO(int accountId, double balance, String currency, boolean active) {
+    public AccountDTO(int accountId , BigDecimal balance , String currency) {
         this.accountId = accountId;
-        this.balance = balance;
+        this.balance = balance.setScale(2);
         this.currency = currency;
-        this.active = active;
-    }*/
+    }
+
+
 
 }

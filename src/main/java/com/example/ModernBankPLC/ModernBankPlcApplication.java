@@ -1,5 +1,10 @@
 package com.example.ModernBankPLC;
-
+/**
+ * @author Rishabh Vishwakarma
+ * @version 1.0.0
+ *
+ * Spring boot application class
+ */
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
