@@ -15,7 +15,8 @@ import java.time.ZonedDateTime;
 @Data
 @AllArgsConstructor
 public class ApiException {
-    private HttpStatus status;
+    private int errorCode;
+    private HttpStatus error;
     private String message;
     private LocalDateTime timestamp;
 

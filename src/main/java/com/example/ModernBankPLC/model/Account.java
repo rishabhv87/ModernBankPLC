@@ -11,35 +11,20 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.util.List;
 /**
+ * @author Rishabh Vishwakarma
+ * @version 1.0.0
  *
+ * This class is a model for the accounts database
  */
 @Data
 @AllArgsConstructor
 public class Account {
 
-    /**
-     *
-     */
     @JsonProperty("account-id")
     private int accountId ;
     private BigDecimal balance;
     private String currency;
     private boolean active;
-
-    /*@JsonIgnore
-    private List<Transaction> transactionDetails;*/
-
-    /*public Account(int accountId, double balance, String currency) {
-        this.accountId = accountId;
-        this.balance = balance;
-        this.currency = currency;
-    }
-
-    public Account(double balance, String currency) {
-        this.accountId = accountId;
-        this.balance = balance;
-        this.currency = currency;
-    }*/
 
     public Account(AccountDTO accountDTO) {
         this.accountId = accountDTO.getAccountId();

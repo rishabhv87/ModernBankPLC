@@ -1,6 +1,9 @@
 package com.example.ModernBankPLC.repository;
 
 
+import com.example.ModernBankPLC.constants.ErrorConstants;
+import com.example.ModernBankPLC.exception.BusinessValidationException;
+import com.example.ModernBankPLC.exception.InvalidAccoutNumberException;
 import com.example.ModernBankPLC.model.Account;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +15,6 @@ import java.util.stream.Collectors;
 
 @Repository
 @Data
-//@AllArgsConstructor
 @NoArgsConstructor
 public class AccountsRepo implements IAccountsRepo {
 
@@ -21,43 +23,76 @@ public class AccountsRepo implements IAccountsRepo {
 
     static Map<Integer, Account> internalAccountsDB;
 
-   /* public static Map<Integer, Account> accountsDB = new HashMap<>();
-
-    static {
-        accountsDB.put(111, new Account(111, new BigDecimal(500.00), "GBP", true));
-        accountsDB.put(222, new Account(222, new BigDecimal(500.00), "GBP", true));
-        accountsDB.put(333, new Account(333, new BigDecimal(500.00), "GBP", true));
-        accountsDB.put(444, new Account(444, new BigDecimal(500.00), "GBP", true));
-        accountsDB.put(555, new Account(555, new BigDecimal(500.00), "GBP", true));
-    }*/
-
     public AccountsRepo(InternalInMemoryDbClass internalInMemoryDB) {
         this.internalInMemoryDB = internalInMemoryDB;
     }
 
+    /**
+     * Method to fetch the account details based on the accountId
+     *
+     * @param accountId
+     * @return Optional and nullable account details from the in-memory database
+     */
     @Override
     public Optional<Account> getAccountByAccountId(int accountId) {
         return Optional.ofNullable(accountsDB().get(accountId));
     }
 
+    /**
+     * Retrieves the account based on account Id from the repository and
+     * deletes the account from the in memory account database by updating its active status to inactive
+     *
+     * @param accountId
+     * @return Returns the deleted account details to the service layer after updating active status to false.
+     */
     @Override
     public Account deleteAccountByAccountId(int accountId) {
         internalAccountsDB = accountsDB();
         if (!internalAccountsDB.containsKey(accountId)) {
-            return null;
+            throw new InvalidAccoutNumberException(ErrorConstants.INVALID_ACCOUNT_NUMBER);
         }
         internalAccountsDB.get(accountId).setActive(false);  // Delete the account , in a way inactivate the account.
         return internalAccountsDB.get(accountId);
     }
 
+
+    /**
+     * Retrieves the list of all the accounts present in the in memory account database
+     *
+     * @return
+     */
     @Override
     public List<Account> getAccountList() {
 
         return accountsDB().values().stream().collect(Collectors.toList());
     }
 
+
+    /**
+     * Adds the account to the accounts database that is received from the client
+     *
+     * @param account
+     * @return
+     */
     @Override
     public Account addAccount(Account account) {
+        internalAccountsDB = accountsDB();
+        if (internalAccountsDB.containsKey(account.getAccountId())) {
+            throw new BusinessValidationException(ErrorConstants.ACCOUNT_ALREADY_EXISTS);
+        }
+        internalAccountsDB.put(account.getAccountId(), account);
+        return account;
+    }
+
+
+    /**
+     * Updates the account detail into the account database
+     *
+     * @param account
+     * @return returns the updated account detail to the service
+     */
+    @Override
+    public Account updateAccountDetails(Account account) {
         accountsDB().put(account.getAccountId(), account);
         return account;
     }
@@ -65,70 +100,5 @@ public class AccountsRepo implements IAccountsRepo {
     private Map<Integer, Account> accountsDB() {
         return internalInMemoryDB.getAccountDB();
     }
-
-    @Override
-    public Account updateAccountDetails(Account account) {
-        accountsDB().put(account.getAccountId(), account);
-        return account;
-    }
-
-
-
-
-
-
-
-    /*
-    @Autowired
-    InternalInMemoryDbClass internalInMemoryDB;
-
-    public static Map<Integer, Account> accountsDB = new HashMap<>();
-
-    static {
-        accountsDB.put(111, new Account(111, new BigDecimal(500.00), "GBP", true));
-        accountsDB.put(222, new Account(222, new BigDecimal(500.00), "GBP", true));
-        accountsDB.put(333, new Account(333, new BigDecimal(500.00), "GBP", true));
-        accountsDB.put(444, new Account(444, new BigDecimal(500.00), "GBP", true));
-        accountsDB.put(555, new Account(555, new BigDecimal(500.00), "GBP", true));
-    }
-
-
-    @Override
-    public Optional<Account> getAccountByAccountId(int accountId) {
-
-        return Optional.ofNullable(accountsDB.get(accountId));
-    }
-
-    @Override
-    public Account deleteAccountByAccountId(int accountId) {
-        if (!accountsDB.containsKey(accountId)) {
-            return null;
-        }
-        accountsDB.get(accountId).setActive(false);  // Delete the account , in a way inactivate the account.
-        return accountsDB.get(accountId);
-    }
-
-    @Override
-    public List<Account> getAccountList() {
-
-        Map<Integer, Account> internalAccountsDB = internalInMemoryDB.getInternalAccountsDB();
-        return internalAccountsDB.values().stream().collect(Collectors.toList());
-        //return accountsDB.values().stream().collect(Collectors.toList());
-    }
-
-    @Override
-    public Account addAccount(Account account) {
-        accountsDB.put(account.getAccountId(), account);
-        return account;
-    }
-
-    @Override
-    public Account updateAccountDetails(Account account) {
-        accountsDB.put(account.getAccountId(), account);
-        return account;
-    }
-
-     */
-
 
 }

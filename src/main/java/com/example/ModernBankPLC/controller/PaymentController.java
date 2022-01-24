@@ -15,6 +15,15 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Controller class to serve the requests related to payment processing between different account
  *
+ *
+ * Eg.
+ * {
+ * 	"debitAccountId" : 444,
+ * 	"creditAccountId" : 333,
+ * 	"txnAmount" : 5.50
+ *
+ * }
+ *
  * @author Rishabh Vishwakarma
  * @version 1.0.0
  */

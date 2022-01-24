@@ -12,6 +12,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
+ * @author Rishabh Vishwakarma
+ * @version 1.0.0
+ *
  * DTO class will be used to communicate between one service to another service or client
  */
 
@@ -31,14 +34,14 @@ public class AccountDTO {
 
     public AccountDTO(Account account) {
         this.accountId = account.getAccountId();
-        this.balance = account.getBalance().setScale(2);
+        this.balance = account.getBalance();
         this.currency = account.getCurrency();
         this.active = account.isActive();
     }
 
     public AccountDTO(int accountId , BigDecimal balance , String currency) {
         this.accountId = accountId;
-        this.balance = balance.setScale(2);
+        this.balance = balance;
         this.currency = currency;
     }
 

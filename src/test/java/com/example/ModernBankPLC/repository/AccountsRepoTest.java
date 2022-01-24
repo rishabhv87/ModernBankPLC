@@ -1,5 +1,8 @@
 package com.example.ModernBankPLC.repository;
 
+import com.example.ModernBankPLC.constants.ErrorConstants;
+import com.example.ModernBankPLC.exception.BusinessValidationException;
+import com.example.ModernBankPLC.exception.InvalidAccoutNumberException;
 import com.example.ModernBankPLC.model.Account;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,22 +38,10 @@ class AccountsRepoTest {
 
 
 
-    @Test
-    void getAccountByAccountId() {
-        IAccountsRepo accountsRepo = new AccountsRepo(internalInMemoryDB);
-        Mockito.when(internalInMemoryDB.getAccountDB()).thenReturn(mockedAccountDB);
-        Optional<Account> account = accountsRepo.getAccountByAccountId(111);
-        assertEquals(111, account.get().getAccountId());
-        assertEquals(new BigDecimal(500.00), account.get().getBalance());
-        assertEquals("GBP", account.get().getCurrency());
-        assertEquals(true, account.get().isActive());
 
 
-    }
 
-    @Test
-    void deleteAccountByAccountId() {
-    }
+
 
     @Test
     void getAccountList() {
@@ -74,6 +65,17 @@ class AccountsRepoTest {
     }
 
     @Test
+    void shouldThrowErrorIfAddExistingAccount() {
+        Account newAccount = new Account(444, new BigDecimal(550.00), "GBP", true);
+        IAccountsRepo accountsRepo = new AccountsRepo(internalInMemoryDB);
+        Mockito.when(internalInMemoryDB.getAccountDB()).thenReturn(mockedAccountDB);
+        BusinessValidationException businessValidationException = assertThrows(BusinessValidationException.class, () -> {
+            accountsRepo.addAccount(newAccount);
+        },"Expected exception when fetching details with invalid accountId");
+        assertEquals(ErrorConstants.ACCOUNT_ALREADY_EXISTS, businessValidationException.getMessage());
+    }
+
+    @Test
     void updateAccountDetails() {
         Account accountToBeUpdated = new Account(555, new BigDecimal(700.00), "GBP", true);
         IAccountsRepo accountsRepo = new AccountsRepo(internalInMemoryDB);
@@ -87,7 +89,7 @@ class AccountsRepoTest {
 
 
     @Test
-    void shouldDeleteAccountDetails() {
+    void shouldDeleteAccountByAccountId() {
 
         IAccountsRepo accountsRepo = new AccountsRepo(internalInMemoryDB);
         Mockito.when(internalInMemoryDB.getAccountDB()).thenReturn(mockedAccountDB);
@@ -97,5 +99,17 @@ class AccountsRepoTest {
         assertEquals(new BigDecimal(500.00), deletedAccount.getBalance());
         assertEquals("GBP", deletedAccount.getCurrency());
         assertEquals(false, deletedAccount.isActive());
+    }
+
+    @Test
+    void shouldReturnNullWhenDeleteAccountThatDoesNotExist() {
+        IAccountsRepo accountsRepo = new AccountsRepo(internalInMemoryDB);
+        Mockito.when(internalInMemoryDB.getAccountDB()).thenReturn(mockedAccountDB);
+        InvalidAccoutNumberException invalidAccoutNumberException = assertThrows(InvalidAccoutNumberException.class, () -> {
+            accountsRepo.deleteAccountByAccountId(666);
+        },"Expected exception when fetching details with invalid accountId");
+        assertEquals(ErrorConstants.INVALID_ACCOUNT_NUMBER, invalidAccoutNumberException.getMessage());
+
+
     }
 }

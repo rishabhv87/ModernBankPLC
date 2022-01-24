@@ -8,7 +8,6 @@ package com.example.ModernBankPLC.model;
  */
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
 import java.math.BigDecimal;
 
 @Data

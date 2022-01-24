@@ -28,7 +28,8 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(value = {InvalidAccoutNumberException.class})
     public ResponseEntity<ApiException> handleApiRequestException(InvalidAccoutNumberException invalidAccoutNumberException) {
-        ApiException apiException = new ApiException(HttpStatus.BAD_REQUEST,
+        ApiException apiException = new ApiException(HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST,
                 invalidAccoutNumberException.getMessage(),
                 LocalDateTime.now());
         return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
@@ -44,7 +45,8 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(value = {BusinessValidationException.class})
     public ResponseEntity<ApiException> handleBusinessValidationException(BusinessValidationException businessValidationException) {
-        ApiException apiException = new ApiException(HttpStatus.BAD_REQUEST,
+        ApiException apiException = new ApiException(HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST,
                 businessValidationException.getMessage(),
                 LocalDateTime.now());
         return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);

@@ -7,6 +7,9 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 /**
+ * @author Rishabh Vishwakarma
+ * @version 1.0.0
+ *
  * Payment DTO that is returned to the client with accounts , amount and transaction id
  * after successful payment
  */

@@ -6,10 +6,12 @@ import lombok.Data;
 
 
 /**
- * Statement DTO Returned to the customer with list of transaction
  *
  * @author Rishabh Vishwakarma
  * @version 1.0.0
+ *
+ * Statement DTO Returned to the customer with list of transaction
+ *
  */
 
 import java.util.List;

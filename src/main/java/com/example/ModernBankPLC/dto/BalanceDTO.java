@@ -8,6 +8,9 @@ import java.math.BigDecimal;
 
 
 /**
+ * @author Rishabh Vishwakarma
+ * @version 1.0.0
+ *
  * Balance DTO to return customer with account-id , balance and currency
  */
 @Data
